@@ -8,7 +8,13 @@
   var q=new URLSearchParams(location.search),k=q.get("d")?"d":q.get("r")?"r":"",v=q.get(k)||"",m=document.getElementById("m");
   var fail=function(t){m.innerHTML="<b>"+t+"</b><p>İnternet bağlantısını yoxlayıb səhifəni yeniləyin.</p>"};
   if(!k||!/^[\w-]{8,20}$/.test(v)){fail("QR kod səhvdir");return}
-  var go=function(n){fetch(G+"?"+k+"="+encodeURIComponent(v)+"&fmt=json",{credentials:"omit",cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+  var L=function(x){try{return localStorage.getItem(x)||""}catch(e){return ""}},S=function(x,y){try{localStorage.setItem(x,y)}catch(e){}};
+  /* anonim ziyarətçi nömrəsi (yalnız bu telefonda saxlanır) və telefonun növü — statistika üçün */
+  var vid=L("zsv");if(!/^[\w-]{6,16}$/.test(vid)){vid="";var a="abcdefghijkmnpqrstuvwxyz23456789";for(var i=0;i<10;i++)vid+=a[Math.floor(Math.random()*a.length)];S("zsv",vid)}
+  var ua=navigator.userAgent||"",os=/iPhone/.test(ua)?"iPhone":/iPad/.test(ua)?"iPad":/Android/.test(ua)?"Android"+(function(){var x=/Android [\d.]+;\s*(?:[a-z]{2}[-_][A-Za-z]{2};\s*)?([^;)]+?)\s*(?:Build|[;)])/.exec(ua);return x&&x[1]&&x[1]!=="K"?" "+x[1]:""})():/Windows/.test(ua)?"Windows":/Mac OS/.test(ua)?"Mac":/Linux/.test(ua)?"Linux":"";
+  var br=/SamsungBrowser/.test(ua)?"Samsung":/YaBrowser/.test(ua)?"Yandex":/OPR\/|Opera/.test(ua)?"Opera":/Edg/.test(ua)?"Edge":/FBAN|FBAV/.test(ua)?"Facebook":/Instagram/.test(ua)?"Instagram":/WhatsApp/.test(ua)?"WhatsApp":/CriOS|Chrome/.test(ua)?"Chrome":/FxiOS|Firefox/.test(ua)?"Firefox":/Safari/.test(ua)?"Safari":"";
+  var ex="&v="+vid+"&os="+encodeURIComponent(os)+"&br="+encodeURIComponent(br)+"&sc="+(screen.width||0)+"x"+(screen.height||0)+"&lg="+encodeURIComponent((navigator.language||"").slice(0,12))+(L("zsname")?"&n="+encodeURIComponent(L("zsname"))+"&c="+encodeURIComponent(L("zsco")):"");
+  var go=function(n){fetch(G+"?"+k+"="+encodeURIComponent(v)+"&fmt=json"+ex,{credentials:"omit",cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
       if(!j||!j.html)throw new Error("bad");document.open();document.write(j.html);document.close()}).catch(function(){if(n<2)setTimeout(function(){go(n+1)},1500);else fail("Səhifəni açmaq alınmadı")})};
   go(0)})();
 </script></body></html>
