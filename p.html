@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="az"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Servis tarixçəsi</title>
+<style>body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F2F5F4;color:#15211E;display:flex;min-height:100vh;align-items:center;justify-content:center}.m{text-align:center;padding:24px}.s{width:36px;height:36px;border:4px solid #CFD8D5;border-top-color:#16362E;border-radius:50%;animation:r 1s linear infinite;margin:0 auto 14px}@keyframes r{to{transform:rotate(360deg)}}</style></head>
+<body><div class="m" id="m"><div class="s"></div>Yüklənir…</div>
+<script>
+/* ZUVAND — müştəri üçün açıq səhifə: cihazın QR etiketi (?d=…) və hesabat PDF-i (?r=…). Məlumat UPS Servis serverindən gəlir. */
+(function(){var G="https://script.google.com/macros/s/AKfycbxECMn4CgDdcBh4F8WhuUl3ks8nKqtMcxOOIRR3aifaL8wR7ORy4adEcoPxC7uVgeE8Ew/exec";
+  var q=new URLSearchParams(location.search),k=q.get("d")?"d":q.get("r")?"r":"",v=q.get(k)||"",m=document.getElementById("m");
+  var fail=function(t){m.innerHTML="<b>"+t+"</b><p>İnternet bağlantısını yoxlayıb səhifəni yeniləyin.</p>"};
+  if(!k||!/^[\w-]{8,20}$/.test(v)){fail("QR kod səhvdir");return}
+  var go=function(n){fetch(G+"?"+k+"="+encodeURIComponent(v)+"&fmt=json",{credentials:"omit",cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+      if(!j||!j.html)throw new Error("bad");document.open();document.write(j.html);document.close()}).catch(function(){if(n<2)setTimeout(function(){go(n+1)},1500);else fail("Səhifəni açmaq alınmadı")})};
+  go(0)})();
+</script></body></html>
