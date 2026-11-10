@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="az">
 <head>
-<script>/*ZSUPD-BOOT*/window.ZS_BUILD=2026110905;window.ZS_APP="ups";(function(){
+<script>/*ZSUPD-BOOT*/window.ZS_BUILD=2026111001;window.ZS_APP="ups";(function(){
 /* installed app (phone APK / Windows): if a newer version was downloaded with "Yenilə", run that one instead of the built-in file */
 var K="zsupd."+ZS_APP;try{var L=location;if(!(L.protocol==="file:"||window.Capacitor||(L.hostname==="localhost"&&!L.port)))return;
 if(/[?&]zsorig=1/.test(L.search)||sessionStorage.getItem(K+".off"))return;var v=+localStorage.getItem(K+".v")||0;
@@ -469,12 +469,12 @@ window.ZSTPL=(function(){
     const types=()=>[...DEF_ORDER.filter(k=>k!=="pq"),...T0.custom.filter(c=>!c.hidden).map(c=>c.key)];
     const title=k=>isCustom(k)?(T0.custom.find(c=>c.key===k)||{}).title:TYPES[k].title;
     const svHead=()=>WS?`<div class="hd"><b>Servis növü:</b><select id="svSel" aria-label="Servis növü"><option value=""${sv?"":" selected"}>— cihaz növünün siyahıları —</option>${SVC_P.map(([k,l])=>`<option value="${k}"${k===sv?" selected":""}>${esc(l)}</option>`).join("")}</select><span style="width:34px"></span></div>`:"";
-    function drawSvc(){const own=(SVC_TABS[sv]||[]).filter(x=>!(svDev&&x[0]==="upd.cb"&&!hasBatT(svDev)));const tabs=(svDev?[]:[["gen","Ümumi"]]).concat(own);
-      if(!tabs.some(x=>x[0]===stab))stab=tabs.length?tabs[0][0]:"gen";const lab=(SVC_P.find(x=>x[0]===sv)||[])[1]||"",W2=work(),dn=svDev?title(svDev):"";
+    function drawSvc(){const own=(SVC_TABS[sv]||[]).filter(x=>!(svDev&&x[0]==="upd.cb"&&!hasBatT(svDev)));const tabs=(svDev&&!own.length?[]:[["gen","Başlıq və kod"]]).concat(own);
+      if(!tabs.some(x=>x[0]===stab))stab=tabs.length?(tabs[1]||tabs[0])[0]:"gen";const lab=(SVC_P.find(x=>x[0]===sv)||[])[1]||"",W2=work(),dn=svDev?title(svDev):"";
       const def=!tabs.length||stab==="gen"?null:svDev?(stab==="um"?baseUm(svDev):baseList(svDev,stab)):(stab==="um"?SDEF.um:SDEF.lists[stab]),curA=!tabs.length||stab==="gen"?null:stab==="um"?W2.um:W2.lists[stab];
       let body="";
       if(!tabs.length)body=`<p class="note" style="margin:0">${sv==="prof"?`Planlı servisdə ölçmə, yoxlama və iş siyahıları cihaz növünün öz siyahılarıdır.</p><div class="actions"><button class="btn" id="svToDev">“${esc(dn)}” cihazının siyahılarını aç</button></div><p class="note" style="margin:0">`:"Bu servis növündə bölmələr sərbəst mətn sahələridir — cihaz növünə görə dəyişəcək siyahı yoxdur."} Başlıq və nömrə kodu bütün cihaz növləri üçün eynidir: yuxarıda “Cihaz növü”ndə “— bütün cihaz növləri —” seçin.</p>`;
-      else if(stab==="gen")body=`<label class="f"><span>Hesabatın başlığı (PDF-də)</span><input id="svTitle" value="${esc(WS.titles[sv]||"")}"></label><p class="note" style="margin:0">Bütün cihazlar UPS olanda başlığın əvvəlinə “UPS” özü əlavə olunur${sv==="bat"?" (akkumulyator testində əlavə olunmur)":""}.</p>
+      else if(stab==="gen")body=`<label class="f"><span>Hesabatın başlığı (PDF-də)</span><input id="svTitle" value="${esc(WS.titles[sv]||"")}"></label><p class="note" style="margin:0">Başlıq yazdığınız kimi çıxır. Standart başlıqda bütün cihazlar UPS olanda əvvələ “UPS” özü əlavə olunur${sv==="bat"?" (akkumulyator testində əlavə olunmur)":""}; başlığı dəyişsəniz, “UPS” əlavə olunmur — lazımdırsa özünüz yazın. Boş qoysanız standart başlıq qayıdır.</p>
         <div><b style="font-size:14px">Hesabat nömrəsinin kodu</b><p class="note" style="margin:2px 0 6px">3 böyük hərf; nömrə belə yaranır: KOD-İLAYGÜN-NN (məs. ${esc(WS.codes[sv==="prof"?"q":sv]||"RSH")}-20261109-01). Köhnə hesabatların nömrəsi dəyişmir.</p>
         <div class="codes">${(sv==="prof"?CODE_L:[[sv,"Kod"]]).map(([k,l])=>`<label class="f"><span>${esc(l)}</span><input data-code="${k}" value="${esc(WS.codes[k]||"")}" maxlength="3" aria-label="${esc(l)} kodu"></label>`).join("")}</div></div>
         <p class="note" style="margin:0">${sv==="prof"?"Planlı servisin ölçmə, yoxlama və iş siyahıları cihaz növünə görədir — yuxarıda “Cihaz növü”nü seçin.":SVC_TABS[sv]?"Bu servis növünün öz siyahıları yuxarıdakı bölmələrdədir.":"Bu servis növündə bölmələr sərbəst mətn sahələridir; dəyişdiriləcək siyahı yoxdur."}</p>`;
@@ -536,7 +536,8 @@ window.ZSTPL=(function(){
         try{await save(T0);ov.remove();if(O.toast)O.toast("Şablonlar saxlanıldı — yeni hesabatlara tətbiq olunur");card()}catch(e){b.disabled=false;msg("Alınmadı: "+(e&&e.message==="forbidden"?"yalnız rəhbər / servis müdiri":(e&&e.message)||e))}}}
     draw()}
   function init(o){O=o;setTimeout(fetchTpl,4000);setInterval(fetchTpl,10*60000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")fetchTpl()})}
-  return {apply,applySvc,svcDef,svcList,svcUm,regApp,optSet,cfDev,cfSvc,open,extra,lists,stamp,reg,isCustom,init,card,fetchTpl,_def:()=>DEF}})();
+  const titleCustom=k=>!!(SREF&&SDEF&&String(SREF.titles[k]||"")!==String(SDEF.titles[k]||""));
+  return {titleCustom,apply,applySvc,svcDef,svcList,svcUm,regApp,optSet,cfDev,cfSvc,open,extra,lists,stamp,reg,isCustom,init,card,fetchTpl,_def:()=>DEF}})();
 </script>
 <script>/* ZUVAND — Ayarlar: QR oxumaların statistikası (yalnız rəhbər / statistika icazəsi; məlumat "QR oxumalar" vərəqindən) */
 window.ZSQRST=(function(){let O=null,R=null,busy=false;
@@ -2680,7 +2681,7 @@ function paperHTML(R,_a,lang){PL=lang||state.plang||"az";const r=realOf(R),keep=
   const A=analyzeReport(r),multi=r.devices.length>1,allUps=r.devices.every(d=>d.type==="ups");
   const W=x=>`<div class="blk">${x}</div>`;
   const tblChunks=(headRow,rows,max)=>{if(rows.length<=max)return [rows];const out=[];for(let i=0;i<rows.length;i+=max)out.push(rows.slice(i,i+max));return out};
-  const PF=SVC_PROF(r);{const cx=window.ZS_SVCX&&ZS_SVCX[String(r.svc.type||"")];REPORT_TITLE=cx&&cx.title?cx.title:(allUps&&PF!=="bat"?"UPS ":"")+(PROF_TITLE[PF]||PROF_TITLE.prof)}
+  const PF=SVC_PROF(r);{const cx=window.ZS_SVCX&&ZS_SVCX[String(r.svc.type||"")];const pk=PROF_TITLE[PF]?PF:"prof",own=typeof ZSTPL!=="undefined"&&ZSTPL.titleCustom&&ZSTPL.titleCustom(pk);REPORT_TITLE=cx&&cx.title?cx.title:(allUps&&PF!=="bat"&&!own?"UPS ":"")+PROF_TITLE[pk]}
   let h=`<div class="paper" id="paper" lang="${PL}"><div class="ph"><div>${LOGO?`<img class="logo" src="${LOGO}" alt="${esc(S.co||"")}">`:`<div class="co">${esc(S.co||t("[Şirkət adı]"))}</div>`}<div class="coi">${esc([S.coaddr,S.cotel].filter(Boolean).join("   "))}</div></div>
   <div class="meta"><b>${t("Hesabat №")} ${dash(r.svc.repno)}</b><br>${t("Tarix:")} ${dash(fmtDate(r.svc.date))}</div></div>
   <h1>${t(REPORT_TITLE)}</h1><div class="sub">${esc(t(r.svc.type||""))}</div>
