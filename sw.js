@@ -1,5 +1,5 @@
 /* UPS Servis — offline: the app files are kept on the phone; the server (Google) is always asked over the network */
-const V="ups-8367021809",SHELL=["./","index.html","config.js","manifest.webmanifest","html2pdf.bundle.min.js","xlsx.full.min.js","exceljs.min.js","apple-touch-icon.png","icon-192.png"];
+const V="ups-ad37a857c1",SHELL=["./","index.html","config.js","manifest.webmanifest","html2pdf.bundle.min.js","xlsx.full.min.js","exceljs.min.js","apple-touch-icon.png","icon-192.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);
